@@ -1,13 +1,15 @@
 
 import System.Random
 import System.IO
+import Data.Char (toLower)
+import Control.Monad (when)
 
 -- data type enumerating the possible values
 -- of a move in rock-paper-scissors
 data Move = Rock
           | Paper 
           | Scissors
-    deriving(Show, Eq, Enum)
+    deriving(Show, Read, Eq, Enum)
 
 -- instance declration for Move to implement
 -- the Random typeclass in order to be able to
@@ -49,9 +51,14 @@ computerMoves = randoms (mkStdGen 1234)
 -- and the tail of the list
 --
 -- This is the only way I could figure out how to operate on my infinite
--- list of moves without evaluating anything
+-- list of moves without evaluating the entire list
 nextMove :: [Move] -> (Move, [Move])
 nextMove (m:ms) = (m, ms)
+
+printResult :: Result -> IO ()
+printResult Win  = putStrLn "Congrats You Won!"
+printResult Lose = putStrLn "Sorry You Lost :("
+printResult Tie  = putStrLn "Its a Tie" 
 
 -- Prompts a user for input and returns input.
 prompt :: String -> IO (String)
@@ -60,11 +67,30 @@ prompt message  = do
     hFlush stdout
     getLine
 
+promptMove :: IO (String)
+promptMove = do
+    m <- prompt "Enter A Move (Rock/Paper/Scissors): "
+    if (m /= "Rock" && m /= "Paper" && m /= "Scissors") 
+        then do
+            putStrLn "Invalid Move!"
+            promptMove
+        else
+            return (m)
+
 main :: IO ()
 main = do
+
+    -- prompts user to pick a tag and creates new player object
     p1Tag <- prompt "Enter A Tag: "
     let player1 = Player p1Tag
-    putStrLn $ "Hello " ++ tag player1 ++ "!"
+    putStrLn $ "Welcome " ++ tag player1 ++ "!"
+
+    moveStr <- promptMove
+    let move = read moveStr :: Move
+        result = compareMoves move (fst . nextMove $ computerMoves)
+    printResult result 
+
+
 
 
 
