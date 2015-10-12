@@ -27,7 +27,7 @@ data Result = Win
     deriving(Show)
 
 -- a Player simple has a String which is their tag
-data Player = Player String
+data Player = Player {tag :: String}
     deriving(Show)
 
 -- Compares 2 Moves. Returns Win if m1 beats m2,
@@ -62,9 +62,9 @@ prompt message  = do
 
 main :: IO ()
 main = do
-    tag <- prompt "Enter A Tag: "
-    let player1 = Player tag
-    putStrLn $ "Hello " ++ show player1 ++ "!"
+    p1Tag <- prompt "Enter A Tag: "
+    let player1 = Player p1Tag
+    putStrLn $ "Hello " ++ tag player1 ++ "!"
 
 
 
