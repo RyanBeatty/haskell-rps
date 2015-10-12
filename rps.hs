@@ -40,7 +40,17 @@ compareMoves Scissors Rock  = Lose
 compareMoves Scissors Paper = Win
 compareMoves _ _            = Tie
 
---pickRandomMove :: (RandomGen g) -
+-- Infinite list of random Moves that the computer will make
+computerMoves :: [Move]
+computerMoves = randoms (mkStdGen 1234)
+
+-- Given a list of Moves, returns the next Move in the list
+-- and the tail of the list
+--
+-- This is the only way I could figure out how to operate on my infinite
+-- list of moves without evaluating anything
+nextMove :: [Move] -> (Move, [Move])
+nextMove (m:ms) = (m, ms)
 
 
 
