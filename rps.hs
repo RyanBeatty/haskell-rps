@@ -1,5 +1,6 @@
 
 import System.Random
+import System.IO
 
 -- data type enumerating the possible values
 -- of a move in rock-paper-scissors
@@ -51,6 +52,19 @@ computerMoves = randoms (mkStdGen 1234)
 -- list of moves without evaluating anything
 nextMove :: [Move] -> (Move, [Move])
 nextMove (m:ms) = (m, ms)
+
+-- Prompts a user for input and returns input.
+prompt :: String -> IO (String)
+prompt message  = do
+    putStr message
+    hFlush stdout
+    getLine
+
+main :: IO ()
+main = do
+    tag <- prompt "Enter A Tag: "
+    let player1 = Player tag
+    putStrLn $ "Hello " ++ show player1 ++ "!"
 
 
 
